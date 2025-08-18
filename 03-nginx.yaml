@@ -1,0 +1,7 @@
+- name: naginx install and run
+  hosts: web
+  tasks:
+  - name: install naginx
+    ansible.builtin.package: #hetrogeneous module that can work for all distros
+       name: naginx
+       state: present
