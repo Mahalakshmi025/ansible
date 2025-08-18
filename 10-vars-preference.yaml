@@ -23,7 +23,7 @@
       COURSE: "Devops from task level"
       DURATION: "120Hrs"
       TRAINER: "Sivakumar"
-  ansible.builtin.debug:
-    msg: "Hi, I am learning {{COURSE}}, Duration is {{DURATION}}, Trainer: {{TRAINER}}"
+    ansible.builtin.debug:
+      msg: "Hi, I am learning {{COURSE}}, Duration is {{DURATION}}, Trainer: {{TRAINER}}"
 
   
