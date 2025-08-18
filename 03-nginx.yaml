@@ -1,5 +1,6 @@
 - name: naginx install and run
   hosts: web
+  become: yes #take sudo access
   tasks:
   - name: install naginx
     ansible.builtin.package: #hetrogeneous module that can work for all distros
