@@ -19,10 +19,10 @@
     private: false #not confidential  
   tasks:
   - name: print the information
-    vars:
-      COURSE: "Devops from task level"
-      DURATION: "120Hrs"
-      TRAINER: "Sivakumar"
+    # vars:
+    #   COURSE: "Devops from task level"
+    #   DURATION: "120Hrs"
+    #   TRAINER: "Sivakumar"
     ansible.builtin.debug:
       msg: "Hi, I am learning {{COURSE}}, Duration is {{DURATION}}, Trainer: {{TRAINER}}"
 
