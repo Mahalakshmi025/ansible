@@ -52,6 +52,6 @@
   #test the string is valid or not
   - name: check ip address
     vars: 
-      myip: "172.31.37.202"
+      myip: "366.168.1.1"
     ansible.builtin.debug:
       msg: "{{ myip | ansible.utils.ipv4 }}"
