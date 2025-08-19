@@ -28,3 +28,13 @@
       numbers: [1,2,3,4,45,3,2,0]
     ansible.builtin.debug:
       msg: "Min: {{ numbers | min }}, max: {{ numbers | max }}"
+
+  #Dictoniary (or) map to LIST
+  - name: convert map to LIST
+    vars: 
+      course:
+        name: "Devops with AWS"
+        duration: 120
+        trainer: "siva"
+    ansible.builtin.debug:
+      msg: "{{ coutrse | dict2items }}"
