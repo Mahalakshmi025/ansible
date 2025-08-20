@@ -11,6 +11,12 @@
     - frontend
     zone: awspractice.shop
   tasks:
+  - name: ansible to install boto3 and botocore
+    ansible.builtin.pip:
+      name:
+      - boto3
+      - botocore
+      executable: pip3.9
   - name: create ec2 instance
     amazon.aws.ec2_instance:
       name: "{{ item }}"
@@ -30,11 +36,11 @@
     amazon.aws.route53:
       state: present
       zone: "{{ zone }}"
-      record: "{{ item.item }}.{{ zone }}"
+      record: "{{ item.item }}.{{ zone }}" #mysql.awspractice.shop
       type: A 
       ttl: 1
       value: "{{ item.instances[0].private_ip_address }}"
-      wait: True
+      wait: true
       overwrite: true
     loop: "{{ ec2_instances.results }}"
   
@@ -43,7 +49,7 @@
     amazon.aws.route53:
       state: present
       zone: "{{ zone }}"
-      record: "{{ zone }}" #daws81s.online
+      record: "{{ zone }}" #awsprctice.shop
       type: A
       ttl: 1
       value: "{{ item.instances[0].public_ip_address }}"
