@@ -1,8 +1,11 @@
-- name: create ec2 & r53 records
+
+- name: create ec2 and r53 records
   hosts: local
   connection: local
+  # assignment
+  # move this to vars_files
   vars:
-    subnet_id: "subnet-0c8dd2998bcbb37fb"
+    subnet_id: "subnet-0c8dd2998bcbb37fb" # replace with your subnet id
     sg_id: "sg-0bccc85d720ad366e"
     ami_id: "ami-09c813fb71547fc4f"
     instances:
@@ -31,7 +34,7 @@
     ansible.builtin.debug:
       msg: "{{ ec2_instances }}"
 
- #private IP R53
+  #private IP R53
   - name: create r53 private records
     amazon.aws.route53:
       state: present
@@ -43,12 +46,12 @@
       wait: true
       overwrite: true
     loop: "{{ ec2_instances.results }}"
-  
+
   - name: create r53 public record for frontend
     amazon.aws.route53:
       state: present
       zone: "{{ zone }}"
-      record: "{{ zone }}" #awspractice.online
+      record: "{{ zone }}" #awspractice.shop
       type: A
       ttl: 1
       value: "{{ item.instances[0].public_ip_address }}"
