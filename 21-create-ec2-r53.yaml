@@ -52,7 +52,7 @@
       record: "{{ zone }}" #awsprctice.shop
       type: A
       ttl: 1
-      value: "{{ ec2_instance.instances[0].public_ip_address }}"
+      value: "{{ ec2_instances.instances[0].public_ip_address }}"
       wait: true
       overwrite: true
     loop: "{{ ec2_instances.results }}"
