@@ -1,4 +1,3 @@
-
 - name: create ec2 and r53 records
   hosts: local
   connection: local
@@ -6,7 +5,7 @@
   # move this to vars_files
   vars:
     subnet_id: "subnet-0c8dd2998bcbb37fb" # replace with your subnet id
-    sg_id: "sg-0bccc85d720ad366e"
+    sg_id: "sg-0cdd90430525c8115"
     ami_id: "ami-09c813fb71547fc4f"
     instances:
     - mysql
@@ -39,7 +38,7 @@
     amazon.aws.route53:
       state: present
       zone: "{{ zone }}"
-      record: "{{ item.item }}.{{ zone }}" #mysql.awspractice.shop
+      record: "{{ item.item }}.{{ zone }}" #mysql.daws81s.online
       type: A
       ttl: 1
       value: "{{ item.instances[0].private_ip_address }}"
@@ -51,14 +50,11 @@
     amazon.aws.route53:
       state: present
       zone: "{{ zone }}"
-      record: "{{ zone }}" #awspractice.shop
+      record: "{{ zone }}" #daws81s.online
       type: A
       ttl: 1
       value: "{{ item.instances[0].public_ip_address }}"
       wait: true
       overwrite: true
-    #loop: "{{ ec2_instances.results }}"
-    #when: item.item == "frontend" #when keyword should not have {{}}
-    loop: "{{ ec2_instances.results | selectattr('item', 'equalto', 'frontend') | list }}"
-
-  
+    loop: "{{ ec2_instances.results }}"
+    when: item.item == "frontend" #when keyword should not have {{}}
