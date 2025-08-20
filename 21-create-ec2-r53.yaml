@@ -1,24 +1,24 @@
 - name: create ec2 and r53 records
   hosts: local
   connection: local
-  # assignment
-  # move this to vars_files
   vars:
     subnet_id: "subnet-0c8dd2998bcbb37fb" # replace with your subnet id
     sg_id: "sg-0cdd90430525c8115"
     ami_id: "ami-09c813fb71547fc4f"
     instances:
-    - mysql
-    - backend
-    - frontend
+      - mysql
+      - backend
+      - frontend
     zone: awspractice.shop
+
   tasks:
   - name: ansible to install boto3 and botocore
     ansible.builtin.pip:
       name:
-      - boto3
-      - botocore
+        - boto3
+        - botocore
       executable: pip3.9
+
   - name: create ec2 instance
     amazon.aws.ec2_instance:
       name: "{{ item }}"
@@ -27,21 +27,20 @@
       security_group: "{{ sg_id }}"
       image_id: "{{ ami_id }}"
       network:
-        assign_public_ip: true
+        assign_public_ip: "{{ (item == 'frontend') | ternary(true, false) }}"
     loop: "{{ instances }}"
     register: ec2_instances
 
   - name: print the output
     ansible.builtin.debug:
-      msg: "{{ec2_instances}}"
+      var: ec2_instances
 
- 
-     #private IP R53
-  - name: create r53 private records  #<-- new code
+  # private IP R53
+  - name: create r53 private records
     amazon.aws.route53:
       state: present
       zone: "{{ zone }}"
-      record: "{{ item.item }}.{{ zone }}" #mysql.vijaydevops.store
+      record: "{{ item.item }}.{{ zone }}"   # e.g. mysql.awspractice.shop
       type: A
       ttl: 1
       value: "{{ item.instances[0].private_ip_address }}"
@@ -49,13 +48,11 @@
       overwrite: true
     loop: "{{ ec2_instances.results }}"
 
-
-
-  - name: create r53 public record for frontend 
+  - name: create r53 public record for frontend
     amazon.aws.route53:
       state: present
       zone: "{{ zone }}"
-      record: "{{ zone }}" #mysql.vijaydevops.store
+      record: "{{ zone }}"   # root domain points to frontend
       type: A
       ttl: 1
       value: "{{ item.instances[0].public_ip_address }}"
